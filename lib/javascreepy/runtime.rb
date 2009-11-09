@@ -3,7 +3,7 @@ module Javascreepy
 
     attr_reader :lang
 
-    def initialize(lang="javascript")
+    def initialize(lang)
       @lang = "javascript"
     end
   end
