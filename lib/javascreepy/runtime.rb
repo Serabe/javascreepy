@@ -1,8 +1,10 @@
-class Runtime
+module Javascreepy
+  class Runtime
 
-  attr_reader :lang
+    attr_reader :lang
 
-  def initialize(lang="javascript")
-    @lang = "javascript"
+    def initialize(lang="javascript")
+      @lang = "javascript"
+    end
   end
 end
