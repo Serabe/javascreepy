@@ -10,4 +10,25 @@ describe Javascreepy::Runtime do
       Javascreepy::Runtime.new.lang.should == "javascript"
     end
   end
+  
+  describe "#[]=" do
+    
+    before(:each) do
+      @rt = Javascreepy::Runtime.new
+      @rt.events = SpecEvents.new
+    end
+    
+    it "should add a variable" do
+      @rt['a'] = 5
+      @rt.eval('alert(a);')
+      @rt.events.value.should == "5"
+    end
+    
+    it "should modify existing variables" do
+      @rt.eval('a=6;')
+      @rt['a'] = 5
+      @rt.eval('alert(a);')
+      @rt.events.value.should == "5"
+    end
+  end
 end

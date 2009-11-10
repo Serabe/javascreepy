@@ -7,3 +7,12 @@ require 'spec/autorun'
 Spec::Runner.configure do |config|
   
 end
+
+class SpecEvents
+  
+  attr_reader :value
+  
+  def write string
+    @value = string
+  end
+end
