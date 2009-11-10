@@ -10,6 +10,11 @@ describe Javascreepy::Runtime do
       Javascreepy::Runtime.new.lang.should == "javascript"
     end
   end
+
+  describe "#start" do
+
+    it "should fail if there's no engine for language"
+  end
   
   describe "#started?" do
 
@@ -23,24 +28,24 @@ describe Javascreepy::Runtime do
   describe "#[]=" do
     
     before(:each) do
-      @rt = Javascreepy::Runtime.new
-      @rt.start
-      @rt.events = SpecEvents.new
+      @rt = Javascreepy::Runtime.new.start
+     # @rt.events = SpecEvents.new
     end
     
     it "should add a variable" do
-      @rt['a'] = 5
-      @rt.eval('alert(a);')
-      # TODO: redo using Runtime#[]
-      @rt.events.value.should == "5"
+      [5, true, false, "hej", nil, 5.6].each do |value|
+	@rt['a'] = value
+	@rt['a'].should == value
+      end
     end
     
     it "should modify existing variables" do
-      @rt.eval('a=6;')
-      @rt['a'] = 5
-      @rt.eval('alert(a);')
-      # TODO: redo using Runtime#[]
-      @rt.events.value.should == "5"
+      pending "implement eval, lazy ass!"
+      [5, true, false, "hej", nil, 5.6].each do |value|
+	@rt.eval('a=6;')
+	@rt['a'] = value
+	@rt['a'].should == value
+      end
     end
 
     it "should fail if runtime not started"
