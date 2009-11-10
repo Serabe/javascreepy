@@ -29,22 +29,20 @@ describe Javascreepy::Runtime do
     
     before(:each) do
       @rt = Javascreepy::Runtime.new.start
-     # @rt.events = SpecEvents.new
     end
     
     it "should add a variable" do
       [5, true, false, "hej", nil, 5.6].each do |value|
-	@rt['a'] = value
-	@rt['a'].should == value
+        @rt['a'] = value
+        @rt['a'].should == value
       end
     end
     
     it "should modify existing variables" do
-      pending "implement eval, lazy ass!"
       [5, true, false, "hej", nil, 5.6].each do |value|
-	@rt.eval('a=6;')
-	@rt['a'] = value
-	@rt['a'].should == value
+        @rt.eval('a=6;')
+        @rt['a'] = value
+        @rt['a'].should == value
       end
     end
 
