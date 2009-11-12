@@ -11,6 +11,20 @@ describe Javascreepy::Runtime do
     end
   end
 
+  describe "#eval" do
+
+    it "should fail if engine not started" do
+      lambda{ Javascreepy::Runtime.new.eval('never executed') }.should raise_error(EngineNotStartedError)
+    end
+  end
+
+  describe "#stop" do
+
+    it "should not fail if engine not started" do
+      lambda { Javascreepy::Runtime.new.stop }.should_not raise_error(EngineNotStartedError)
+    end
+  end
+
   describe "#start" do
 
     it "should fail if there's no engine for language" do
@@ -25,6 +39,12 @@ describe Javascreepy::Runtime do
       Javascreepy::Runtime.new.should_not be_started
       Javascreepy::Runtime.new.start.should be_started
       Javascreepy::Runtime.new.start.stop.should_not be_started
+    end
+  end
+
+  describe "#[]" do
+    it "should fail if runtime not started" do
+      lambda {Javascreepy::Runtime.new['a'] }.should raise_error(EngineNotStartedError)
     end
   end
 
@@ -49,7 +69,9 @@ describe Javascreepy::Runtime do
       end
     end
 
-    it "should fail if runtime not started"
+    it "should fail if runtime not started" do
+      lambda{ Javascreepy::Runtime.new['a']=5 }.should raise_error(EngineNotStartedError)
+    end
 
     after(:each) do
       @rt.stop
