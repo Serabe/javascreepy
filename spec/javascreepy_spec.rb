@@ -13,7 +13,10 @@ describe Javascreepy::Runtime do
 
   describe "#start" do
 
-    it "should fail if there's no engine for language"
+    it "should fail if there's no engine for language" do
+      lang = "this_is_not_a_valid_language_or_at_least_i_hope_so"
+      lambda{ Javascreepy::Runtime.new(lang).start}.should raise_error(Javascreepy::EngineNotFoundError)
+    end
   end
   
   describe "#started?" do

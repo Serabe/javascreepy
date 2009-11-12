@@ -12,6 +12,7 @@ import org.jruby.RubyFloat;
 import org.jruby.RubyObject;
 import org.jruby.RubyString;
 import org.jruby.anno.JRubyMethod;
+import org.jruby.exceptions.RaiseException;
 import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
@@ -20,7 +21,7 @@ import static org.jruby.RubyNumeric.num2int;
 import static org.jruby.RubyNumeric.num2dbl;
 import static org.jruby.javasupport.util.RuntimeHelpers.invoke;
 
-class Runtime extends RubyObject {
+public class Runtime extends RubyObject {
 
         protected String lang;
         protected ScriptEngine engine;
@@ -41,6 +42,7 @@ class Runtime extends RubyObject {
         public static IRubyObject rbNew(ThreadContext context, IRubyObject klazz, IRubyObject[] params) {
                 Ruby ruby = context.getRuntime();
                 RubyString lang;
+		System.out.println(params.length);
                 if(params.length == 0){
                         lang = ruby.newString("javascript");
                 } else {
@@ -115,8 +117,12 @@ class Runtime extends RubyObject {
 
         @JRubyMethod
         public IRubyObject start(ThreadContext context) {
+		Ruby ruby = context.getRuntime();
                 this.engine = (new ScriptEngineManager()).getEngineByName(this.lang);
-                this.engine.getContext().setWriter(new CreepyWriter(context.getRuntime(), this));
+		if(this.engine == null) {
+			throw new RaiseException(new EngineNotFoundError(ruby, this.lang));
+		}
+                this.engine.getContext().setWriter(new CreepyWriter(ruby, this));
                 return this;
         }
 

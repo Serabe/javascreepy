@@ -17,6 +17,7 @@ public class JavascreepyService implements BasicLibraryService {
         public static void init(Ruby ruby) {
                 RubyModule javascreepy = ruby.defineModule("Javascreepy");
                 init_runtime(ruby, javascreepy);
+                init_engine_not_found_error(ruby, javascreepy);
         }
 
         public static void init_runtime(Ruby ruby, RubyModule javascreepy) {
@@ -25,9 +26,14 @@ public class JavascreepyService implements BasicLibraryService {
                 runtime.defineAnnotatedMethods(Runtime.class);
         }
 
+        public static void init_engine_not_found_error(Ruby ruby, RubyModule javascreepy) {
+                RubyModule error = javascreepy.defineClassUnder("EngineNotFoundError", ruby.getStandardError(), ruby.getStandardError().getAllocator());
+                error.defineAnnotatedMethods(EngineNotFoundError.class);
+        }
+
         public static ObjectAllocator RUNTIME_ALLOCATOR = new ObjectAllocator() {
                 public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                        return null;
+                        return new Runtime(runtime, klazz);
                 }
         };
 }
