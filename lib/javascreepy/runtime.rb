@@ -5,7 +5,7 @@ module Javascreepy
     attr_accessor :events
     
     def initialize(lang)
-      @lang = "javascript"
+      @lang = lang
       @events = Events.new
     end
 
