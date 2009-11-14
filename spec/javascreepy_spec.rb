@@ -9,6 +9,10 @@ describe Javascreepy::Runtime do
     it "should take javascript as default language" do
       Javascreepy::Runtime.new.lang.should == "javascript"
     end
+
+    it "should take the language take as parameter" do
+      Javascreepy::Runtime.new("lang").lang.should == "lang"
+    end
   end
 
   describe "#eval" do
