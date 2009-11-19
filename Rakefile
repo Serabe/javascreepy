@@ -91,7 +91,7 @@ end
 
 task :default => [:test]
 
-task :test do
+task :test => [:build_jar] do
   cp = File.join('.', 'lib', 'jruby.jar')
   system "java -cp #{cp} org.jruby.Main -S rake spec"
 end
