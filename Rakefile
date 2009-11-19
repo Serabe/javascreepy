@@ -2,7 +2,6 @@ require 'rubygems'
 require 'rake'
 
 JAR='lib/javascreepy/javascreepy.jar'
-JRUBY_HOME = "."
 
 begin
   require 'jeweler'
@@ -77,7 +76,7 @@ task :clean_all => ['java:clean_classes', 'java:clean_jar']
 desc "Build external library"
 task :build_external do
   Dir.chdir('ext/java') do
-    CLASS_PATH="#{JRUBY_HOME}/lib/jruby.jar"
+    CLASS_PATH="../../lib/jruby.jar"
     sh "javac -cp #{CLASS_PATH} javascreepy/*.java"
     sh "jar cf ../../#{JAR} javascreepy/*.class"
   end
