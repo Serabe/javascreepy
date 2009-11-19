@@ -31,17 +31,17 @@ if java
     spec.libs << 'lib' << 'spec'
     spec.spec_files = FileList['spec/**/*_spec.rb']
   end
+
+  Spec::Rake::SpecTask.new(:rcov) do |spec|
+    spec.libs << 'lib' << 'spec'
+    spec.pattern = 'spec/**/*_spec.rb'
+    spec.rcov = true
+  end
 else
   task :spec => :build_jar do
     cp = File.join('.', 'lib', 'jruby.jar')
     system "java -cp #{cp} org.jruby.Main -S rake spec"
   end
-end
-
-Spec::Rake::SpecTask.new(:rcov) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
 end
 
 task :spec => :check_dependencies
