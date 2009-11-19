@@ -3,6 +3,8 @@ require 'rake'
 
 JAR='lib/javascreepy/javascreepy.jar'
 
+java = RUBY_PLATFORM =~ /java/
+
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
@@ -23,10 +25,17 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
 end
 
-require 'spec/rake/spectask'
-Spec::Rake::SpecTask.new(:spec => :build_jar) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.spec_files = FileList['spec/**/*_spec.rb']
+if java
+  require 'spec/rake/spectask'
+  Spec::Rake::SpecTask.new(:spec => :build_jar) do |spec|
+    spec.libs << 'lib' << 'spec'
+    spec.spec_files = FileList['spec/**/*_spec.rb']
+  end
+else
+  task :spec => :build_jar do
+    cp = File.join('.', 'lib', 'jruby.jar')
+    system "java -cp #{cp} org.jruby.Main -S rake spec"
+  end
 end
 
 Spec::Rake::SpecTask.new(:rcov) do |spec|
@@ -86,11 +95,4 @@ task :build_jar => ["clean_jar", "build_external", "clean_classes"]
 
 def rm_globs(*globs)
   globs.each{|glob| FileUtils.rm Dir.glob(glob)}
-end
-
-task :default => [:test]
-
-task :test => [:build_jar] do
-  cp = File.join('.', 'lib', 'jruby.jar')
-  system "java -cp #{cp} org.jruby.Main -S rake spec"
 end
