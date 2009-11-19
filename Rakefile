@@ -2,8 +2,7 @@ require 'rubygems'
 require 'rake'
 
 JAR='lib/javascreepy/javascreepy.jar'
-
-java = RUBY_PLATFORM =~ /java/
+JRUBY_HOME= Config::CONFIG['prefix']
 
 begin
   require 'jeweler'
@@ -25,23 +24,16 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
 end
 
-if java
-  require 'spec/rake/spectask'
-  Spec::Rake::SpecTask.new(:spec => :build_jar) do |spec|
-    spec.libs << 'lib' << 'spec'
-    spec.spec_files = FileList['spec/**/*_spec.rb']
-  end
+require 'spec/rake/spectask'
+Spec::Rake::SpecTask.new(:spec => :build_jar) do |spec|
+  spec.libs << 'lib' << 'spec'
+  spec.spec_files = FileList['spec/**/*_spec.rb']
+end
 
-  Spec::Rake::SpecTask.new(:rcov) do |spec|
-    spec.libs << 'lib' << 'spec'
-    spec.pattern = 'spec/**/*_spec.rb'
-    spec.rcov = true
-  end
-else
-  task :spec => :build_jar do
-    cp = File.join('.', 'lib', 'jruby.jar')
-    system "java -cp #{cp} org.jruby.Main -S rake spec"
-  end
+Spec::Rake::SpecTask.new(:rcov) do |spec|
+  spec.libs << 'lib' << 'spec'
+  spec.pattern = 'spec/**/*_spec.rb'
+  spec.rcov = true
 end
 
 task :spec => :check_dependencies
@@ -85,7 +77,7 @@ task :clean_all => ['java:clean_classes', 'java:clean_jar']
 desc "Build external library"
 task :build_external do
   Dir.chdir('ext/java') do
-    CLASS_PATH="../../lib/jruby.jar"
+    CLASS_PATH="#{JRUBY_HOME}/lib/jruby.jar"
     sh "javac -cp #{CLASS_PATH} javascreepy/*.java"
     sh "jar cf ../../#{JAR} javascreepy/*.class"
   end
