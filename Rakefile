@@ -88,3 +88,10 @@ task :build_jar => ["clean_jar", "build_external", "clean_classes"]
 def rm_globs(*globs)
   globs.each{|glob| FileUtils.rm Dir.glob(glob)}
 end
+
+task :default => [:test]
+
+task :test do
+  cp = File.join('.', 'lib', 'jruby.jar')
+  system "java -cp #{cp} org.jruby.Main -S rake spec"
+end
