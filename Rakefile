@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rake'
 
 JAR='lib/javascreepy/javascreepy.jar'
-JRUBY_HOME = Config::CONFIG['prefix']
+JRUBY_HOME = "."
 
 begin
   require 'jeweler'
